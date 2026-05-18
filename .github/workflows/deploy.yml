@@ -15,10 +15,11 @@ jobs:
         env:
             NODE_OPTIONS: --openssl-legacy-provider
         run: |
-          corepack disable
-          npm install -g yarn@1
-          yarn install
-          cd gulp && yarn install && yarn gulp build.web-shapezio
+            corepack disable
+            npm install -g yarn@1
+            yarn install
+            cp src/js/core/config.local.template.js src/js/core/config.local.js
+            cd gulp && yarn install --network-timeout 30000 && yarn gulp build.web-shapezio
       - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
