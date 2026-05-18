@@ -1,0 +1,25 @@
+name: Deploy to Cloudflare
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install System Dependencies
+        run: sudo apt-get update && sudo apt-get install -y default-jre-headless ffmpeg
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Build Project
+        run: |
+          corepack disable
+          npm install -g yarn@1
+          yarn install
+          cd gulp && yarn install && yarn gulp build.web-shapezio
+      - name: Deploy to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy build --project-name=your-project-name
