@@ -12,6 +12,8 @@ jobs:
         with:
           node-version: 18
       - name: Build Project
+        env:
+            NODE_OPTIONS: --openssl-legacy-provider
         run: |
           corepack disable
           npm install -g yarn@1
