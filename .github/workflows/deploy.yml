@@ -20,6 +20,11 @@ jobs:
             yarn install
             cp src/js/core/config.local.template.js src/js/core/config.local.js
             cd gulp && yarn install --network-timeout 30000 && yarn gulp build.web-shapezio
+      - name: Switch to Node 20 for deployment
+        uses: actions/setup-node@v4
+        with:
+            node-version: 20
+
       - name: Deploy to Cloudflare
         env:
             CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
